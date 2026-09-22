@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BuildAI — Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(90, 0, 255, .14), transparent 30%),
+        radial-gradient(circle at 10% 80%, rgba(0, 120, 255, .10), transparent 30%),
+        #050505;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* TOP BAR */
+
+    header {
+      height: 62px;
+      background: rgba(8, 8, 8, .94);
+      border-bottom: 1px solid #242424;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      color: #4da3ff;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .small-btn {
+      background: #111;
+      border: 1px solid #292929;
+      color: #ddd;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .small-btn:hover {
+      border-color: #4d7cff;
+    }
+
+    /* LAYOUT */
+
+    .layout {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      min-height: calc(100vh - 62px);
+    }
+
+    /* SIDEBAR */
+
+    aside {
+      background: rgba(7, 7, 7, .95);
+      border-right: 1px solid #222;
+      padding: 18px 12px;
+    }
+
+    .side-title {
+      color: #666;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin: 8px 10px 12px;
+    }
+
+    .side-link {
+      display: block;
+      padding: 11px 12px;
+      color: #aaa;
+      text-decoration: none;
+      border-radius: 7px;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .side-link:hover,
+    .side-link.active {
+      background: #151515;
+      color: #fff;
+    }
+
+    /* MAIN */
+
+    main {
+      padding: 25px;
+      max-width: 1300px;
+      width: 100%;
+      margin: auto;
+    }
+
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .welcome p {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* AI BUILDER */
+
+    .builder {
+      margin-top: 25px;
+      background: rgba(13, 13, 13, .9);
+      border: 1px solid #292929;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .builder-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .builder-title {
+      font-weight: bold;
+    }
+
+    .status {
+      color: #62e6a8;
+      font-size: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: #080808;
+      color: #fff;
+      border: 1px solid #292929;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 15px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #386eff;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    select {
+      background: #111;
+      color: #ddd;
+      border: 1px solid #292929;
+      padding: 11px;
+      border-radius: 8px;
+    }
+
+    .generate-btn {
+      flex: 1;
+      min-width: 180px;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .generate-btn:hover {
+      opacity: .9;
+    }
+
+    /* WORKSPACE */
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .panel {
+      background: #0d0d0d;
+      border: 1px solid #242424;
+      border-radius: 13px;
+      overflow: hidden;
+      min-height: 420px;
+    }
+
+    .panel-head {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      background: #111;
+      border-bottom: 1px solid #242424;
+      font-size: 13px;
+    }
+
+    .panel-body {
+      padding: 15px;
+    }
+
+    /* GENERATED CODE */
+
+    #codeOutput {
+      background: #070707;
+      color: #b9d6ff;
+      min-height: 350px;
+      padding: 15px;
+      border-radius: 8px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* PREVIEW */
+
+    .preview-screen {
+      background: white;
+      color: #111;
+      min-height: 350px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .preview-empty {
+      min-height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #777;
+      padding: 20px;
+    }
+
+    /* PUBLISH */
+
+    .publish {
+      margin-top: 20px;
+      background: #0d0d0d;
+      border: 1px solid #242424;
+      border-radius: 13px;
+      padding: 20px;
+    }
+
+    .publish h2 {
+      font-size: 18px;
+      margin-bottom: 7px;
+    }
+
+    .publish p {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .hosts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .host {
+      background: #111;
+      border: 1px solid #292929;
+      color: #ddd;
+      padding: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .host:hover {
+      border-color: #4778ff;
+    }
+
+    .host small {
+      display: block;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    #publishStatus {
+      color: #62e6a8;
+      font-size: 13px;
+      margin-top: 13px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 850px) {
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .hosts {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      header {
+        padding: 0 12px;
+      }
+
+      .header-right .small-btn:first-child {
+        display: none;
+      }
+
+      .welcome h1 {
+        font-size: 23px;
+      }
+
+      .builder {
+        padding: 13px;
+      }
+
+      textarea {
+        height: 135px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+  <div class="logo">
+    🤖 BuildAI
+  </div>
+
+  <div class="header-right">
+
+    <button class="small-btn" onclick="newProject()">
+      + New Project
+    </button>
+
+    <button class="small-btn" onclick="goHome()">
+      Home
+    </button>
+
+  </div>
+
+</header>
+
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+
+  <aside>
+
+    <div class="side-title">
+      Workspace
+    </div>
+
+    <a class="side-link active" href="dashboard.html">
+      🤖 AI Builder
+    </a>
+
+    <a class="side-link" href="projects.html">
+      📁 My Projects
+    </a>
+
+    <a class="side-link" href="preview.html">
+      👁️ Preview
+    </a>
+
+    <a class="side-link" href="settings.html">
+      ⚙️ Settings
+    </a>
+
+    <div class="side-title">
+      Account
+    </div>
+
+    <a class="side-link" href="#">
+      👤 My Account
+    </a>
+
+    <a class="side-link" href="#">
+      💳 Plans
+    </a>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <div class="welcome">
+
+      <h1>
+        Build with AI
+      </h1>
+
+      <p>
+        Describe your idea and let BuildAI create your project.
+      </p>
+
+    </div>
+
+
+    <!-- BUILDER -->
+
+    <section class="builder">
+
+      <div class="builder-top">
+
+        <div class="builder-title">
+          ✨ AI Project Builder
+        </div>
+
+        <div class="status">
+          ● AI Ready
+        </div>
+
+      </div>
+
+
+      <textarea
+        id="prompt"
+        placeholder="Describe what you want BuildAI to create..."
+      ></textarea>
+
+
+      <div class="controls">
+
+        <select id="projectType">
+
+          <option value="website">
+            🌐 Website
+          </option>
+
+          <option value="webapp">
+            💻 Web App
+          </option>
+
+          <option value="pwa">
+            📱 PWA
+          </option>
+
+          <option value="game">
+            🎮 Game
+          </option>
+
+        </select>
+
+
+        <select id="style">
+
+          <option value="modern">
+            Modern
+          </option>
+
+          <option value="classic">
+            Classic
+          </option>
+
+          <option value="colorful">
+            Colorful
+          </option>
+
+          <option value="minimal">
+            Minimal
+          </option>
+
+        </select>
+
+
+        <button
+          class="generate-btn"
+          onclick="generateProject()"
+        >
+          ✨ Generate Project
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- WORKSPACE -->
+
+    <section class="workspace">
+
+      <!-- CODE -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <span>
+            💻 Generated Code
+          </span>
+
+          <span>
+            HTML
+          </span>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div id="codeOutput">
+Your generated code will appear here...
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PREVIEW -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <span>
+            👁️ Live Preview
+          </span>
+
+          <span>
+            Preview
+          </span>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div
+            id="preview"
+            class="preview-screen"
+          >
+
+            <div class="preview-empty">
+
+              <div>
+
+                <h3>
+                  Your preview will appear here
+                </h3>
+
+                <p style="margin-top:8px;">
+                  Generate a project to see it.
+
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PUBLISH -->
+
+    <section class="publish">
+
+      <h2>
+        🚀 Publish Your Project
+      </h2>
+
+      <p>
+        Choose a hosting provider when your project is ready.
+      </p>
+
+
+      <div class="hosts">
+
+        <button
+          class="host"
+          onclick="selectHost('Netlify')"
+        >
+          🟢 Netlify
+          <small>
+            Publish website
+          </small>
+        </button>
+
+
+        <button
+          class="host"
+          onclick="selectHost('Cloudflare Pages')"
+        >
+          🟠 Cloudflare
+          <small>
+            Pages hosting
+          </small>
+        </button>
+
+
+        <button
+          class="host"
+          onclick="selectHost('Vercel')"
+        >
+          ⚫ Vercel
+          <small>
+            Deploy project
+          </small>
+        </button>
+
+      </div>
+
+
+      <div id="publishStatus"></div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<script>
+
+  /*
+    Load the prompt from index.html
+  */
+
+  const savedPrompt =
+    localStorage.getItem("aiProjectPrompt");
+
+  if (savedPrompt) {
+    document.getElementById("prompt").value =
+      savedPrompt;
+  }
+
+
+  /*
+    Generate Project
+
+    This is currently the frontend placeholder.
+    Later we will connect this to the actual AI API.
+  */
+
+  function generateProject() {
+
+    const prompt =
+      document.getElementById("prompt").value.trim();
+
+    const type =
+      document.getElementById("projectType").value;
+
+    const style =
+      document.getElementById("style").value;
+
+    if (!prompt) {
+
+      alert(
+        "Please describe what you want to build."
+      );
+
+      return;
+    }
+
+
+    const code =
+`<!-- BuildAI Generated Project -->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width,
+        initial-scale=1.0">
+
+  <title>My BuildAI Project</title>
+
+</head>
+
+<body>
+
+  <h1>My BuildAI Project</h1>
+
+  <p>
+    Project type: ${type}
+  </p>
+
+  <p>
+    Style: ${style}
+  </p>
+
+  <p>
+    AI Prompt:
+    ${prompt}
+  </p>
+
+</body>
+
+</html>`;
+
+
+    document.getElementById("codeOutput")
+      .textContent = code;
+
+
+    document.getElementById("preview")
+      .innerHTML = `
+        <div style="
+          padding:35px;
+          text-align:center;
+        ">
+
+          <h1>
+            My BuildAI Project
+          </h1>
+
+          <p style="
+            margin-top:15px;
+            color:#555;
+          ">
+            ${prompt}
+          </p>
+
+          <div style="
+            margin-top:25px;
+            padding:12px;
+            background:#f1f5ff;
+            border-radius:8px;
+          ">
+            ${type.toUpperCase()} • ${style.toUpperCase()}
+          </div>
+
+        </div>
+      `;
+
+
+    localStorage.setItem(
+      "generatedCode",
+      code
+    );
+
+  }
+
+
+  /*
+    Hosting provider selection
+  */
+
+  function selectHost(host) {
+
+    document.getElementById(
+      "publishStatus"
+    ).textContent =
+      host +
+      " selected. Publishing integration will be connected soon.";
+
+  }
+
+
+  /*
+    New project
+  */
+
+  function newProject() {
+
+    localStorage.removeItem(
+      "aiProjectPrompt"
+    );
+
+    localStorage.removeItem(
+      "generatedCode"
+    );
+
+    document.getElementById("prompt").value = "";
+
+    document.getElementById("codeOutput")
+      .textContent =
+      "Your generated code will appear here...";
+
+    document.getElementById("preview")
+      .innerHTML = `
+        <div class="preview-empty">
+          <div>
+            <h3>
+              Your preview will appear here
+            </h3>
+          </div>
+        </div>
+      `;
+
+  }
+
+
+  /*
+    Return home
+  */
+
+  function goHome() {
+
+    window.location.href =
+      "index.html";
+
+  }
+
+</script>
+
+</body>
+</html>
