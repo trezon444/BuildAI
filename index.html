@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BuildAI — AI Website & App Creator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 120, 255, 0.16), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(120, 0, 255, 0.13), transparent 30%),
+        #050505;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 5, 5, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #222;
+      padding: 15px 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #4da3ff;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: #4da3ff;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 70px 20px;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 850px;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid #333;
+      background: rgba(255,255,255,.04);
+      padding: 8px 15px;
+      border-radius: 30px;
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 8vw, 72px);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #4da3ff, #a855f7, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: #999;
+      max-width: 650px;
+      margin: auto;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* AI BOX */
+
+    .create-box {
+      max-width: 750px;
+      margin: 35px auto 0;
+      padding: 18px;
+      background: rgba(15,15,15,.9);
+      border: 1px solid #292929;
+      border-radius: 18px;
+      box-shadow: 0 0 50px rgba(0,100,255,.08);
+    }
+
+    textarea {
+      width: 100%;
+      height: 130px;
+      resize: none;
+
+      background: #0a0a0a;
+      border: 1px solid #292929;
+      border-radius: 12px;
+
+      padding: 16px;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #3478ff;
+    }
+
+    textarea::placeholder {
+      color: #666;
+    }
+
+    .create-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px;
+
+      border: none;
+      border-radius: 10px;
+
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: white;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .create-btn:hover {
+      transform: translateY(-2px);
+      opacity: .92;
+    }
+
+    /* FEATURES */
+
+    .section {
+      padding: 70px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 35px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      background: rgba(15,15,15,.85);
+      border: 1px solid #242424;
+      border-radius: 15px;
+      padding: 28px;
+      transition: .2s;
+    }
+
+    .feature:hover {
+      border-color: #345cff;
+      transform: translateY(-3px);
+    }
+
+    .icon {
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .feature h3 {
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      color: #888;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* HOW IT WORKS */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .step {
+      text-align: center;
+      padding: 25px;
+      background: #0c0c0c;
+      border: 1px solid #222;
+      border-radius: 14px;
+    }
+
+    .number {
+      width: 45px;
+      height: 45px;
+      margin: 0 auto 15px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 50%;
+
+      color: #4da3ff;
+      font-weight: bold;
+    }
+
+    .step p {
+      color: #888;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    /* CONTACT */
+
+    .contact {
+      max-width: 700px;
+      margin: auto;
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(15,15,15,.85);
+      border: 1px solid #222;
+      border-radius: 16px;
+    }
+
+    .contact p {
+      color: #999;
+      margin: 12px 0;
+    }
+
+    .contact a {
+      color: #4da3ff;
+      text-decoration: none;
+    }
+
+    /* ADMIN */
+
+    .admin-link {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .admin-link a {
+      color: #777;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .admin-link a:hover {
+      color: #4da3ff;
+    }
+
+    /* FOOTER */
+
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid #222;
+      padding: 25px 20px;
+      text-align: center;
+      color: #777;
+      font-size: 13px;
+    }
+
+    footer strong {
+      color: #aaa;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      header {
+        padding: 13px 15px;
+      }
+
+      .logo {
+        font-size: 19px;
+      }
+
+      nav {
+        gap: 9px;
+      }
+
+      nav a {
+        font-size: 12px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 65px 15px;
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .features,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 50px 15px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+  <div class="logo">
+    🤖 BuildAI
+  </div>
+
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="badge">
+      ✨ AI Website & App Creator
+    </div>
+
+    <h1>
+      Build Anything
+      <br>
+      <span class="gradient-text">With AI</span>
+    </h1>
+
+    <p>
+      Describe your idea and BuildAI will help turn it into a
+      website or app. Generate, preview, edit and publish your
+      creation online.
+    </p>
+
+
+    <div class="create-box">
+
+      <textarea
+        id="prompt"
+        placeholder="Tell BuildAI what you want to create...
+
+Example: Create a colorful chat website called DeeChat with login, profiles, chat rooms and shouts."
+      ></textarea>
+
+      <button class="create-btn" onclick="startCreating()">
+        ✨ Create With AI
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="section" id="features">
+
+  <h2 class="section-title">
+    What You Can Build
+  </h2>
+
+  <div class="features">
+
+    <div class="feature">
+      <div class="icon">🤖</div>
+      <h3>AI Website Builder</h3>
+      <p>
+        Describe your website idea and generate the structure,
+        pages and interface with AI.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="icon">📱</div>
+      <h3>App Creator</h3>
+      <p>
+        Create mobile-friendly web apps and eventually package
+        projects for mobile devices.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="icon">🚀</div>
+      <h3>Publish Online</h3>
+      <p>
+        Publish your creations through connected hosting
+        providers and get a live web address.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="icon">🎨</div>
+      <h3>AI Design</h3>
+      <p>
+        Generate modern layouts, colors, pages and components
+        from simple instructions.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="icon">👁️</div>
+      <h3>Live Preview</h3>
+      <p>
+        Preview your project before publishing it to the web.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="icon">🌐</div>
+      <h3>Multiple Hosts</h3>
+      <p>
+        Build the platform to support multiple hosting providers
+        such as Netlify, Cloudflare Pages and Vercel.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="section" id="how">
+
+  <h2 class="section-title">
+    How BuildAI Works
+  </h2>
+
+  <div class="steps">
+
+    <div class="step">
+
+      <div class="number">1</div>
+
+      <h3>Describe</h3>
+
+      <p>
+        Tell AI what website or app you want.
+      </p>
+
+    </div>
+
+
+    <div class="step">
+
+      <div class="number">2</div>
+
+      <h3>Build</h3>
+
+      <p>
+        BuildAI generates your project and lets you edit it.
+      </p>
+
+    </div>
+
+
+    <div class="step">
+
+      <div class="number">3</div>
+
+      <h3>Publish</h3>
+
+      <p>
+        Publish your finished project and get a live URL.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section class="section" id="contact">
+
+  <h2 class="section-title">
+    Contact BuildAI
+  </h2>
+
+  <div class="contact">
+
+    <p>
+      📧 Email:
+      <a href="mailto:davecollar43@gmail.com">
+        davecollar43@gmail.com
+      </a>
+    </p>
+
+    <p>
+      💬 WhatsApp:
+      <a href="https://wa.me/2348164636218" target="_blank">
+        08164636218
+      </a>
+    </p>
+
+  </div>
+
+
+  <!-- ADMIN -->
+
+  <div class="admin-link">
+
+    <a href="admin.html">
+      🔐 Admin
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  © 2026 BuildAI
+
+  <br><br>
+
+  Created by <strong>DaVeCrEaToR</strong>
+
+</footer>
+
+
+<script>
+
+  function startCreating() {
+
+    const prompt =
+      document.getElementById("prompt").value.trim();
+
+    if (!prompt) {
+
+      alert(
+        "Please describe the website or app you want to create."
+      );
+
+      return;
+    }
+
+    localStorage.setItem(
+      "aiProjectPrompt",
+      prompt
+    );
+
+    window.location.href =
+      "dashboard.html";
+
+  }
+
+</script>
+
+</body>
+</html>
