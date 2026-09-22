@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BuildAI — Admin</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    min-height:100vh;
+}
+
+header{
+    background:#0b0b0b;
+    border-bottom:1px solid #222;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:bold;
+    color:#00c8ff;
+}
+
+.admin-badge{
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#161616;
+    color:#aaa;
+}
+
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+h1{
+    font-size:28px;
+    margin-bottom:6px;
+}
+
+.subtitle{
+    color:#888;
+    margin-bottom:25px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#0d0d0d;
+    border:1px solid #222;
+    border-radius:14px;
+    padding:20px;
+}
+
+.card h3{
+    color:#888;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#00c8ff;
+}
+
+.sections{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.section{
+    background:#0d0d0d;
+    border:1px solid #222;
+    border-radius:14px;
+    padding:20px;
+}
+
+.section h2{
+    font-size:18px;
+    margin-bottom:18px;
+}
+
+.admin-list{
+    list-style:none;
+}
+
+.admin-list li{
+    padding:13px 0;
+    border-bottom:1px solid #1d1d1d;
+    color:#ccc;
+}
+
+.admin-list li:last-child{
+    border-bottom:none;
+}
+
+button{
+    border:none;
+    border-radius:9px;
+    padding:11px 15px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:4px;
+}
+
+.primary{
+    background:#00aaff;
+    color:#000;
+}
+
+.secondary{
+    background:#191919;
+    color:#fff;
+    border:1px solid #333;
+}
+
+.danger{
+    background:#c62828;
+    color:#fff;
+}
+
+.account{
+    margin-top:20px;
+    padding:18px;
+    background:#090909;
+    border:1px solid #222;
+    border-radius:12px;
+}
+
+.account p{
+    margin:7px 0;
+    color:#aaa;
+}
+
+.account strong{
+    color:#fff;
+}
+
+footer{
+    text-align:center;
+    padding:30px 15px;
+    color:#666;
+    font-size:13px;
+}
+
+@media(max-width:800px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sections{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:450px){
+    .container{
+        padding:15px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .stats{
+        gap:10px;
+    }
+
+    .card{
+        padding:15px;
+    }
+
+    .number{
+        font-size:23px;
+    }
+
+    header{
+        padding:13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🤖 BuildAI</div>
+    <div class="admin-badge">ADMIN PANEL</div>
+</header>
+
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+    <p class="subtitle">
+        Manage BuildAI users, projects, publishing and platform activity.
+    </p>
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="card">
+            <h3>Total Users</h3>
+            <div class="number" id="totalUsers">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Projects</h3>
+            <div class="number" id="totalProjects">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Published Apps</h3>
+            <div class="number" id="publishedApps">0</div>
+        </div>
+
+        <div class="card">
+            <h3>AI Generations</h3>
+            <div class="number" id="aiGenerations">0</div>
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN SECTIONS -->
+
+    <div class="sections">
+
+        <div class="section">
+
+            <h2>👥 User Management</h2>
+
+            <ul class="admin-list">
+
+                <li>View all users</li>
+
+                <li>Search users</li>
+
+                <li>View user projects</li>
+
+                <li>Suspend users</li>
+
+                <li>Ban / unban users</li>
+
+                <li>Delete accounts</li>
+
+            </ul>
+
+            <button class="primary" onclick="manageUsers()">
+                Manage Users
+            </button>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>🚀 Publishing</h2>
+
+            <ul class="admin-list">
+
+                <li>Netlify deployments</li>
+
+                <li>Cloudflare Pages deployments</li>
+
+                <li>Vercel deployments</li>
+
+                <li>Deployment history</li>
+
+                <li>Failed deployments</li>
+
+                <li>Published projects</li>
+
+            </ul>
+
+            <button class="primary" onclick="managePublishing()">
+                Manage Publishing
+            </button>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>🤖 AI System</h2>
+
+            <ul class="admin-list">
+
+                <li>AI generation requests</li>
+
+                <li>AI usage statistics</li>
+
+                <li>Generation errors</li>
+
+                <li>API status</li>
+
+                <li>Usage limits</li>
+
+            </ul>
+
+            <button class="primary" onclick="manageAI()">
+                AI Settings
+            </button>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>⚙️ Platform</h2>
+
+            <ul class="admin-list">
+
+                <li>Website settings</li>
+
+                <li>Plans & pricing</li>
+
+                <li>Contact information</li>
+
+                <li>System status</li>
+
+                <li>Security settings</li>
+
+            </ul>
+
+            <button class="primary" onclick="platformSettings()">
+                Platform Settings
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN ACCOUNT -->
+
+    <div class="account">
+
+        <h2>🔐 Administrator</h2>
+
+        <p>
+            Email:
+            <strong>davecollar43@gmail.com</strong>
+        </p>
+
+        <p>
+            Role:
+            <strong>Owner / Super Admin</strong>
+        </p>
+
+        <p>
+            Access:
+            <strong>Full platform control</strong>
+        </p>
+
+        <button class="secondary" onclick="goHome()">
+            ← Back to BuildAI
+        </button>
+
+        <button class="danger" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>© 2026 BuildAI</p>
+    <p>Created by DaVeCrEaToR</p>
+</footer>
+
+
+<script>
+
+/*
+    ADMIN DASHBOARD
+
+    Real user/project statistics will be connected
+    to the backend later.
+*/
+
+function loadStats(){
+
+    const projects =
+        JSON.parse(localStorage.getItem("buildaiProjects") || "[]");
+
+    const generations =
+        Number(localStorage.getItem("aiGenerations") || 0);
+
+    const published =
+        Number(localStorage.getItem("publishedApps") || 0);
+
+    document.getElementById("totalProjects").textContent =
+        projects.length;
+
+    document.getElementById("aiGenerations").textContent =
+        generations;
+
+    document.getElementById("publishedApps").textContent =
+        published;
+
+    /*
+       User accounts will be connected to the
+       authentication/database system later.
+    */
+
+    document.getElementById("totalUsers").textContent = "—";
+}
+
+
+function manageUsers(){
+
+    alert(
+        "User management will be connected to the BuildAI backend."
+    );
+
+}
+
+
+function managePublishing(){
+
+    alert(
+        "Netlify, Cloudflare Pages and Vercel publishing management will be connected here."
+    );
+
+}
+
+
+function manageAI(){
+
+    alert(
+        "AI settings and usage management will be connected here."
+    );
+
+}
+
+
+function platformSettings(){
+
+    alert(
+        "BuildAI platform settings will be added here."
+    );
+
+}
+
+
+function goHome(){
+
+    window.location.href = "index.html";
+
+}
+
+
+function logout(){
+
+    localStorage.removeItem("buildaiAdmin");
+
+    window.location.href = "index.html";
+
+}
+
+
+loadStats();
+
+</script>
+
+</body>
+</html>
